@@ -58,10 +58,10 @@
   </wsdl:binding>
   <wsdl:service name="WebExtractServices">
     <wsdl:port name="WebExtractServicesSoap" binding="tns:WebExtractServicesSoap">
-      <soap:address location="http://localhost:8000/wsdl"/>
+      <soap:address location="https://ofsted-feed.herokuapp.com/wsdl"/>
     </wsdl:port>
     <wsdl:port name="WebExtractServicesSoap12" binding="tns:WebExtractServicesSoap12">
-      <soap12:address location="http://localhost:8000/wsdl"/>
+      <soap12:address location="https://ofsted-feed.herokuapp.com/wsdl"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

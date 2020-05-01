@@ -1,7 +1,7 @@
 
 var soap = require('soap');
 var fs = require('fs')
-var url = 'http://localhost:8000/wsdl?wsdl';
+var url = 'https://ofsted-feed.herokuapp.com/wsdl?wsdl';
 
 // Create client
 soap.createClient(url, function (err, client) {
