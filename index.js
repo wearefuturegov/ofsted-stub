@@ -8,16 +8,12 @@ var fs = require('fs');
 
 // the function called by the service
 function extract_function(args) {
-    console.log('extract_function');
+    console.log(`extract_function`);
     console.log(args)
-    var lACode = args.lACode;
-    var loginName = args.loginName;
-    console.log(`Login ${loginName} from LA ${lACode}`);
-    //... example data ...
-    return {
-      GetChildcareExtractForLAResult: 1,
-      xMLExtract: "testing"
-    }
+
+    //Example data 
+    var response = fs.readFileSync('soap/OfstedChildcareRegisterLocalAuthorityExtract-v1-3-example.xml', 'utf8');
+    return response
 }
 
 // the service
@@ -33,7 +29,7 @@ var serviceObject = {
 };
 
 // load the WSDL file
-var xml = fs.readFileSync('WebExtractServices.wsdl', 'utf8');
+var xml = fs.readFileSync('soap/WebExtractServices.wsdl', 'utf8');
 // create express app
 var app = express();
 
