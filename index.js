@@ -9,7 +9,7 @@ var fs = require('fs');
 // the function called by the service
 function extract_function(args) {
     console.log(`extract_function`);
-    console.log(args)
+    console.log(`Received message: ${args}`)
 
     //Example data 
     var response = fs.readFileSync('soap/OfstedChildcareRegisterLocalAuthorityExtract-v1-3-example.xml', 'utf8');
