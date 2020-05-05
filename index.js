@@ -37,7 +37,7 @@ var app = express();
 app.get('/', function (req, res) {
   console.log(req.headers)
   var xForwardedFor = req.header('x-forwarded-for')
-  res.send(`${xForwardedFor} Node Soap Example!<br /><a href="https://github.com/macogala/node-soap-example#readme">Git README</a>`);
+  res.json({"client-ip": xForwardedFor});
 })
 
 // Launch the server and listen
