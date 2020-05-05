@@ -35,7 +35,9 @@ var app = express();
 
 // root handler
 app.get('/', function (req, res) {
-  res.send('Node Soap Example!<br /><a href="https://github.com/macogala/node-soap-example#readme">Git README</a>');
+  console.log(req.headers)
+  xForwardedFor = req.header('x-forwarded-for')
+  res.send(`${xForwardedFor} Node Soap Example!<br /><a href="https://github.com/macogala/node-soap-example#readme">Git README</a>`);
 })
 
 // Launch the server and listen
