@@ -32,6 +32,7 @@ jobs:
             --update-env-vars=FUNCTION_URL=${function_url},PROJECT_NUMBER=${project_number},WSDL=./wsdl.xml
       - name: Update ofsted-stub container with its own url (not ideal)
         run: |
+          project_id=$(gcloud config get-value project)
           its_own_url=$(gcloud run services describe ofsted-stub --platform=managed --region=europe-west1 --format="value(status.url)")
           gcloud run deploy ofsted-stub --image=gcr.io/${project_id}/ofsted-stub \
             --platform=managed --region=europe-west1 --allow-unauthenticated \
