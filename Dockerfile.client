@@ -21,4 +21,5 @@ WORKDIR /app
 COPY --from=build /build/node_modules node_modules/
 COPY --from=build /build/client.sh .
 COPY --from=build /build/client.js .
+RUN chmod +x ./client.sh
 CMD ./client.sh

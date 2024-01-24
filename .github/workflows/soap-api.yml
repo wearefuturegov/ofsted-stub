@@ -1,0 +1,38 @@
+name: Ofsted SOAP stub container
+
+on:
+  push:
+    # branches: [main]
+    # paths:
+    #   - "ofsted-client/**"
+
+jobs:
+  ofsted-client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
+          project_id: ${{ secrets.PROJECT_ID }}
+      # Deploy the container
+      # see: https://cloud.google.com/run/docs/locations
+      # NB Cloud Run is currently available in eurompe-west1 (Belgium) and europe-west2 (Netherlands) but not europe-west2 (London)
+      - name: Build ofsted-stub image
+        run: |
+          project_id=$(gcloud config get-value project)
+          gcloud builds submit --tag gcr.io/${project_id}/ofsted-stub --timeout 15m
+      - name: Deploy ofsted-stub container
+        run: |
+          project_id=$(gcloud config get-value project)
+          project_number=$(gcloud projects describe $project_id --format="value(projectNumber)")
+          gcloud run deploy ofsted-stub --image=gcr.io/${project_id}/ofsted-stub \
+            --platform=managed --region=europe-west1 --allow-unauthenticated \
+            --update-env-vars=FUNCTION_URL=${function_url},PROJECT_NUMBER=${project_number},WSDL=./wsdl.xml
+      - name: Update ofsted-stub container with its own url (not ideal)
+        run: |
+          its_own_url=$(gcloud run services describe ofsted-stub --platform=managed --region=europe-west1 --format="value(status.url)")
+          gcloud run deploy ofsted-stub --image=gcr.io/${project_id}/ofsted-stub \
+            --platform=managed --region=europe-west1 --allow-unauthenticated \
+            --update-env-vars=SOAP_URL=${its_own_url}

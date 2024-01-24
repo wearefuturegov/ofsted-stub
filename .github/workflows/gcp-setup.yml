@@ -1,0 +1,41 @@
+# This is a basic workflow to create, configure and deploy artefacts and resources
+# for the PPE Inventory project in the DEMO/Live environment
+
+name: GCP Setup
+
+on:
+  push:
+    # branches: [main]
+    # paths:
+    #   - ".github/workflows/gcp-setup.yml"
+
+jobs:
+  # These run in parallel because gcp-services and setup-networking only make changes on the first run.
+  # Running in parallel speeds things up for normal runs (accepting you might get one or two errors for a new deployment)
+
+  gcp-services:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: "auth"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}"
+          project_id: ${{ secrets.PROJECT_ID }}
+
+      - name: Setup gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+
+      # Enable the APIs for services we need
+      - name: Enable APIs
+        run: |
+          gcloud services enable cloudresourcemanager.googleapis.com
+          gcloud services enable cloudfunctions.googleapis.com
+          gcloud services enable sheets.googleapis.com
+          gcloud services enable cloudbuild.googleapis.com
+          gcloud services enable run.googleapis.com
+  # NB these services might not all be needed but this is copied from ofsted-feed repo
+  # had to enable these manually to get these jobs to run, don't want to include them in this job if not needed but added here for future reference
+  # gcloud services enable compute.googleapis.com
+  # gcloud services enable vpcaccess.googleapis.com
+  # gcloud services enable secretmanager.googleapis.com
