@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env ash
 
-curl https://ofsted-feed.herokuapp.com/wsdl?wsdl
+curl $SOAP_URL/wsdl?wsdl
 echo ""
 echo ""
 node client.js
