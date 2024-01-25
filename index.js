@@ -42,12 +42,6 @@ app.get("/", function (req, res) {
   res.json({ "client-ip": xForwardedFor });
 });
 
-app.post("/", function (req, res) {
-  console.log(req.headers);
-  var xForwardedFor = req.header("x-forwarded-for");
-  res.json({ "client-ip": xForwardedFor });
-});
-
 // Launch the server and listen
 var port = process.env.PORT || "3000";
 app.listen(port, function () {
