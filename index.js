@@ -1,50 +1,63 @@
 /*jslint node: true */
 "use strict";
 
-
-var soap = require('soap');
-var express = require('express');
-var fs = require('fs');
+var soap = require("soap");
+var express = require("express");
+var fs = require("fs");
 
 // the function called by the service
 function extract_function(args) {
-    console.log(`extract_function`);
-    console.log(`Received message: ${args}`)
+  console.log(`extract_function`);
+  console.log(`Received message: ${args}`);
 
-    //Example data 
-    var response = fs.readFileSync('soap/OfstedChildcareRegisterLocalAuthorityExtract-v1-3-example.xml', 'utf8');
-    return response
+  //Example data
+  var response = fs.readFileSync(
+    "soap/OfstedChildcareRegisterLocalAuthorityExtract-v1-3-example.xml",
+    "utf8"
+  );
+  return response;
 }
 
 // the service
 var serviceObject = {
   WebExtractServices: {
     WebExtractServicesSoap: {
-      GetChildcareExtractForLA: extract_function
+      GetChildcareExtractForLA: extract_function,
     },
     WebExtractServicesSoap12: {
-      GetChildcareExtractForLA: extract_function
-    }
-  }
+      GetChildcareExtractForLA: extract_function,
+    },
+  },
 };
 
 // load the WSDL file
-var xml = fs.readFileSync('soap/WebExtractServices.wsdl', 'utf8');
+var xml = fs.readFileSync("soap/WebExtractServices.wsdl", "utf8");
 // create express app
 var app = express();
 
 // root handler
-app.get('/', function (req, res) {
-  console.log(req.headers)
-  var xForwardedFor = req.header('x-forwarded-for')
-  res.json({"client-ip": xForwardedFor});
-})
+app.get("/", function (req, res) {
+  console.log(req.headers);
+  var xForwardedFor = req.header("x-forwarded-for");
+  res.json({ "client-ip": xForwardedFor });
+});
+
+app.post("/", function (req, res) {
+  console.log(req.headers);
+  var xForwardedFor = req.header("x-forwarded-for");
+  res.json({ "client-ip": xForwardedFor });
+});
 
 // Launch the server and listen
 var port = process.env.PORT || "3000";
 app.listen(port, function () {
-  console.log('Listening on port ' + port);
+  console.log("Listening on port " + port);
   var wsdl_path = "/wsdl";
   soap.listen(app, wsdl_path, serviceObject, xml);
-  console.log("Check http://localhost:" + port + wsdl_path +"?wsdl to see if the service is working");
+  console.log(
+    "Check http://localhost:" +
+      port +
+      wsdl_path +
+      "?wsdl to see if the service is working"
+  );
 });
